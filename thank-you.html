@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You - Debnance</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    body { font-family: 'Montserrat', sans-serif; background: #fffaf5; }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+    .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .animate-float { animation: float 3s ease-in-out infinite; }
+    .progress-container { width:100%; height:6px; background:#f3f4f6; border-radius:3px; overflow:hidden; margin:16px auto; max-width:400px; }
+    .progress-bar { height:100%; width:0%; background:linear-gradient(to right, #D4AF37, #FBBF24); transition: width 0.1s linear; }
+    @keyframes pulse-glow { 0% { box-shadow:0 0 0 0 rgba(212,175,55,0.4); } 50% { box-shadow:0 0 0 10px rgba(212,175,55,0); } 100% { box-shadow:0 0 0 0 rgba(212,175,55,0); } }
+    .animate-pulse-glow { animation: pulse-glow 2s infinite; }
+  </style>
+</head>
+<body class="bg-pink-50 min-h-screen relative overflow-hidden">
+
+  <canvas id="confetti-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none"></canvas>
+
+  <div class="max-w-lg mx-auto px-6 py-16 text-center relative z-20">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6 animate-fade-in">Deb<span class="text-amber-600">nance</span></h1>
+    <div class="animate-float mb-6 flex justify-center"><svg class="w-20 h-20 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+    <h2 class="text-3xl font-bold text-gray-900 mb-4 animate-fade-in">Booking Confirmed! 🌟</h2>
+    <p class="text-lg text-gray-700 animate-fade-in">Thank you! We'll contact you shortly via WhatsApp.</p>
+
+    <div class="mt-10 bg-white border border-amber-200 rounded-xl p-6 animate-fade-in">
+      <h3 class="font-semibold text-gray-900">Next Steps:</h3>
+      <ul class="space-y-2 mt-2 text-sm">
+        <li>✅ Reply within 30 minutes</li>
+        <li>📞 Confirmation via WhatsApp or call</li>
+      </ul>
+    </div>
+
+    <div class="mt-8 animate-fade-in">
+      <p id="countdownText" class="text-amber-600 font-medium mb-3">Returning to homepage in <span id="countdown">8</span> seconds...</p>
+      <div class="progress-container"><div id="progressBar" class="progress-bar"></div></div>
+      <a href="index.html" id="backButton" class="hidden inline-block bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-full font-semibold animate-pulse-glow">← Go Back Now</a>
+    </div>
+  </div>
+
+  <script>
+    // Confetti
+    const duration = 5 * 1000;
+    const animationEnd = Date.now() + duration;
+    const colors = ['#D4AF37', '#FBBF24', '#EF4444', '#EC4899'];
+    const random = (min, max) => Math.random() * (max - min) + min;
+    const interval = setInterval(() => {
+      const timeLeft = animationEnd - Date.now();
+      if (timeLeft <= 0) { clearInterval(interval); return; }
+      confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0 }, colors });
+      confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1 }, colors });
+    }, 250);
+
+    // Countdown
+    let timeLeft = 8;
+    const countdown = document.getElementById("countdown");
+    const progressBar = document.getElementById("progressBar");
+    const totalSeconds = timeLeft;
+    const timer = setInterval(() => {
+      timeLeft--;
+      countdown.textContent = timeLeft;
+      const progress = ((totalSeconds - timeLeft) / totalSeconds) * 100;
+      progressBar.style.width = `${progress}%`;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        document.getElementById("countdownText").classList.add("hidden");
+        document.getElementById("backButton").classList.remove("hidden");
+        setTimeout(() => window.location.href = "index.html", 3000);
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
